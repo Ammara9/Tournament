@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,23 +18,25 @@ namespace Tournament.Api.Controller
     public class TournamentDetailsController : ControllerBase
     {
         private readonly TournamentApiContext _context;
+        private readonly IMapper _mapper;
 
-        public TournamentDetailsController(TournamentApiContext context)
+        public TournamentDetailsController(TournamentApiContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/TournamentDetails
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TournamentDetails>>> GetTournamentDetails()
         {
-            var tournaments = _context.TournamentDetails.Select(t => new TournamentDetailsDto
-            {
-                Id = t.Id,
-                Title = t.Title,
-                StartDate = t.StartDate,
-            });
-            return Ok(await tournaments.ToListAsync());
+            //var tournaments = _context.TournamentDetails.ToListAsync();
+            //var dto = _mapper.Map<IEnumerable><TournamentDetailsDto>>(tournaments);
+            var tournaments = await _context
+                .TournamentDetails.ProjectTo<TournamentDetailsDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return Ok(tournaments);
         }
 
         // GET: api/TournamentDetails/5
@@ -46,12 +50,7 @@ namespace Tournament.Api.Controller
                 return NotFound();
             }
 
-            var dto = new TournamentDetailsDto
-            {
-                Id = tournamentDetails.Id,
-                Title = tournamentDetails.Title,
-                StartDate = tournamentDetails.StartDate,
-            };
+            var dto = _mapper.Map<TournamentDetailsDto>(tournamentDetails);
             return Ok(dto);
         }
 

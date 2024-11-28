@@ -10,4 +10,10 @@
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tournament.Api\Tournament.Api.csproj" />
+    <ProjectReference Include="..\Tournament.Core\Tournament.Core.csproj" />
+    <ProjectReference Include="..\Tournament.Data\Tournament.Data.csproj" />
+  </ItemGroup>
+
 </Project>
