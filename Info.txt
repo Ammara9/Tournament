@@ -1,1 +1,16 @@
 Bogus för seeding måsta installera...
+DTo...
+DTo: här kan man kontrollera vad man vill ha med (förklaring)
+förklaring: seed data listan visar id är null.. nu vill vi att den ska visa id också här behöver vi DTos...
+
+Skapa ett folder DTOs : databärare
+add => class => CompanyDto
+
+inte class använd record
+Rocord: refrencetyp, inte kan ändras
+constructor inbyggd
+kopiera allt från company.cs tabel
+change set; => init;
+
+göra om companycontroller: API DAG 1 DEL 2
+komentera bort andra metoder för att den ska fungera
