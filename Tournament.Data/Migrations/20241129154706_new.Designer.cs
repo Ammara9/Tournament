@@ -12,8 +12,8 @@ using Tournament.Data.Data;
 namespace Tournament.Data.Migrations
 {
     [DbContext(typeof(TournamentApiContext))]
-    [Migration("20241128142344_TournamentGameTable")]
-    partial class TournamentGameTable
+    [Migration("20241129154706_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,17 +39,14 @@ namespace Tournament.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TournamentDetailsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TournamentId")
+                    b.Property<int>("TournamentDetailsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TournamentDetailsId");
 
-                    b.ToTable("Game");
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("Tournament.Core.Entities.TournamentDetails", b =>
@@ -75,7 +72,9 @@ namespace Tournament.Data.Migrations
                 {
                     b.HasOne("Tournament.Core.Entities.TournamentDetails", null)
                         .WithMany("Games")
-                        .HasForeignKey("TournamentDetailsId");
+                        .HasForeignKey("TournamentDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tournament.Core.Entities.TournamentDetails", b =>

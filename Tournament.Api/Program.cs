@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tournament.Api.AutoMapper;
 using Tournament.Api.Extensions;
+using Tournament.Core.Repositories;
 using Tournament.Data.Data;
+using Tournament.Data.Repositories;
 
 namespace Tournament.Api
 {
@@ -21,7 +23,7 @@ namespace Tournament.Api
             );
 
             // Add services to the container.
-            // 1.0 hj�lper oss att mappa mot Json och Xml
+            // 1.0 hj�lper oss att mappa mot Json och Xml, patch
             builder
                 .Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
                 .AddNewtonsoftJson()
@@ -32,6 +34,9 @@ namespace Tournament.Api
 
             //AutoMapping
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+            //Repo service
+            //builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

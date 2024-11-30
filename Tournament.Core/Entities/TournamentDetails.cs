@@ -14,7 +14,5 @@ namespace Tournament.Core.Entities
         public DateTime StartDate { get; set; }
 
         public ICollection<Game> Games { get; set; } = new List<Game>();
-
-        public TournamentDetails() { }
     }
 }

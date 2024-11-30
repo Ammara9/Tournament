@@ -1,4 +1,6 @@
-﻿namespace Tournament.Api.DTOs
+﻿using Tournament.Shared.DTOs;
+
+namespace Tournament.Api.DTOs
 {
     public record TournamentDetailsDto
     {
@@ -6,5 +8,6 @@
         public string? Title { get; init; }
 
         public DateTime StartDate { get; init; }
+        public IEnumerable<GameDto>? Games { get; init; }
     }
 }

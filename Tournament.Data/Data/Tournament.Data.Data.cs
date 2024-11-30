@@ -12,8 +12,7 @@ namespace Tournament.Data.Data
         public TournamentApiContext(DbContextOptions<TournamentApiContext> options)
             : base(options) { }
 
-        public DbSet<Tournament.Core.Entities.TournamentDetails> TournamentDetails { get; set; } =
-            default!;
-        public DbSet<Tournament.Core.Entities.Game> Game { get; set; } = default!;
+        public DbSet<TournamentDetails> TournamentDetails { get; set; } = default!;
+        public DbSet<Game> Games { get; set; } = default!;
     }
 }

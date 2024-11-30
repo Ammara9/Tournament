@@ -2,107 +2,168 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tournament.Core.Entities;
 using Tournament.Data.Data;
+using Tournament.Shared.DTOs;
 
 namespace Tournament.Api.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/tournaments/{tournamentId}/games")]
     [ApiController]
     public class GamesController : ControllerBase
     {
         private readonly TournamentApiContext _context;
+        private readonly IMapper _mapper;
 
-        public GamesController(TournamentApiContext context)
+        public GamesController(TournamentApiContext context, IMapper map)
         {
             _context = context;
+            _mapper = map;
         }
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(int tournamentId)
         {
-            return await _context.Game.ToListAsync();
-        }
-
-        // GET: api/Games/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
-        {
-            var game = await _context.Game.FindAsync(id);
-
-            if (game == null)
-            {
+            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
+                t.Id == tournamentId
+            );
+            if (!tournamentExist)
                 return NotFound();
-            }
 
-            return game;
+            var games = await _context
+                .Games.Where(g => g.TournamentDetailsId == tournamentId)
+                .ToListAsync();
+
+            var gamesDtos = _mapper.Map<IEnumerable<GameDto>>(games);
+
+            return Ok(gamesDtos);
         }
 
-        // PUT: api/Games/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGame(int id, Game game)
-        {
-            if (id != game.Id)
-            {
-                return BadRequest();
-            }
+        //// GET: api/Games/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Game>> GetGame(int id)
+        //{
+        //    var game = await _context.Games.FindAsync(id);
 
-            _context.Entry(game).State = EntityState.Modified;
+        //    if (game == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GameExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    return game;
+        //}
 
-            return NoContent();
-        }
+        //// PUT: api/Games/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutGame(int id, Game game)
+        //{
+        //    if (id != game.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-        // POST: api/Games
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
-        {
-            _context.Game.Add(game);
-            await _context.SaveChangesAsync();
+        //    _context.Entry(game).State = EntityState.Modified;
 
-            return CreatedAtAction("GetGame", new { id = game.Id }, game);
-        }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!GameExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+
+        //// POST: api/Games
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Game>> PostGame(Game game)
+        //{
+        //    _context.Game.Add(game);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetGame", new { id = game.Id }, game);
+        //}
 
         // DELETE: api/Games/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id)
+        public async Task<IActionResult> DeleteGame(int id, int tournamentId)
         {
-            var game = await _context.Game.FindAsync(id);
+            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
+                t.Id == tournamentId
+            );
+            if (!tournamentExist)
+                return NotFound();
+
+            var game = await _context.Games.FirstOrDefaultAsync(g =>
+                g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
+            );
             if (game == null)
             {
                 return NotFound();
             }
 
-            _context.Game.Remove(game);
+            _context.Games.Remove(game);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool GameExists(int id)
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult> PatchGame(
+            int tournamentId,
+            int id,
+            JsonPatchDocument<GameUpdateDto> patchDocument
+        )
         {
-            return _context.Game.Any(e => e.Id == id);
+            if (patchDocument is null)
+                return BadRequest("No patch document");
+
+            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
+                t.Id == tournamentId
+            );
+            if (!tournamentExist)
+                return NotFound();
+
+            var gameToPatch = await _context.Games.FirstOrDefaultAsync(g =>
+                g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
+            );
+            if (gameToPatch == null)
+                return NotFound();
+
+            var dto = _mapper.Map<GameUpdateDto>(gameToPatch);
+            patchDocument.ApplyTo(dto, ModelState);
+            TryValidateModel(dto);
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity();
+
+            _mapper.Map(dto, gameToPatch);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
+
+        //private bool GameExists(int id)
+        //{
+        //    return _context.Game.Any(e => e.Id == id);
+        //}
     }
 }

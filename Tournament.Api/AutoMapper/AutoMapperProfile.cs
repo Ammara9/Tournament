@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Tournament.Api.DTOs;
 using Tournament.Core.Entities;
+using Tournament.Shared.DTOs;
 
 namespace Tournament.Api.AutoMapper
 {
@@ -9,6 +10,12 @@ namespace Tournament.Api.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<TournamentDetails, TournamentDetailsDto>();
+            CreateMap<TournamentDetailsCreateDto, TournamentDetails>();
+            CreateMap<TournamentUpdateeDto, TournamentDetails>();
+
+            CreateMap<Game, GameDto>().ReverseMap();
+            CreateMap<Game, GameUpdateDto>().ReverseMap();
+;
         }
     }
 }
