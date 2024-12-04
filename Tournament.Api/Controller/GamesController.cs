@@ -29,7 +29,10 @@ namespace Tournament.Api.Controller
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(int tournamentId)
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(
+            int tournamentId,
+            string title
+        )
         {
             var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
                 t.Id == tournamentId
@@ -38,7 +41,7 @@ namespace Tournament.Api.Controller
                 return NotFound();
 
             var games = await _context
-                .Games.Where(g => g.TournamentDetailsId == tournamentId)
+                .Games.Where(g => g.Title!.Equals(title, StringComparison.OrdinalIgnoreCase))
                 .ToListAsync();
 
             var gamesDtos = _mapper.Map<IEnumerable<GameDto>>(games);

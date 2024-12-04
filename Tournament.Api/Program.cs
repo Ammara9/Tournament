@@ -37,6 +37,7 @@ namespace Tournament.Api
             //Repo service
             //builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.ConfigureCors();
 
             var app = builder.Build();
 
@@ -59,6 +60,8 @@ namespace Tournament.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
