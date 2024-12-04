@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Tournament.Api.DTOs;
-using Tournament.Core.Entities;
+using Domain.Models.Entities;
 using Tournament.Shared.DTOs;
 
 namespace Tournament.Api.AutoMapper
@@ -15,7 +14,7 @@ namespace Tournament.Api.AutoMapper
 
             CreateMap<Game, GameDto>().ReverseMap();
             CreateMap<Game, GameUpdateDto>().ReverseMap();
-;
+            ;
         }
     }
 }

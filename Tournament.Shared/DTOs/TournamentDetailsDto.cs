@@ -1,6 +1,4 @@
-﻿using Tournament.Shared.DTOs;
-
-namespace Tournament.Api.DTOs
+﻿namespace Tournament.Shared.DTOs
 {
     public record TournamentDetailsDto
     {

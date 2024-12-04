@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Entities;
+using Domain.Models.Entities;
 
 namespace Tournament.Core.Repositories
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using Tournament.Core.Entities;
+using Domain.Models.Entities;
 
 namespace Tournament.Data.Data
 {
