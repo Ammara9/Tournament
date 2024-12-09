@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tournament.Core.DTOs;
 using Tournament.Data.Data;
-using Tournament.Shared.DTOs;
 
-namespace Tournament.Api.Controller
+namespace Tournament.Presentation.Controller
 {
     [Route("api/tournaments/{tournamentId}/games")]
     [ApiController]

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Tournament.Core.Repositories;
+using Tournament.Core.Contracts;
+using Tournament.Core.DTOs;
+using Tournament.Core.Entities;
 using Tournament.Data.Data;
-using Tournament.Shared.DTOs;
 
-namespace Tournament.Api.Controller
+namespace Tournament.Presentation.Controller
 {
     [Route("api/tournaments")]
     [ApiController]

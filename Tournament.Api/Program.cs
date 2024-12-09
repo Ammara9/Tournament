@@ -1,11 +1,10 @@
-﻿using Domain.Models.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tournament.Api.AutoMapper;
 using Tournament.Api.Extensions;
-using Tournament.Core.Repositories;
+using Tournament.Core.Contracts;
 using Tournament.Data.Data;
-using Tournament.Data.Repositories;
+using Tournament.Services.Repositories;
 
 namespace Tournament.Api
 {

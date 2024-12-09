@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Api", "Tournament.Api\Tournament.Api.csproj", "{F14738A9-065F-4DC8-9299-AD1644AFDDC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.API", "Tournament.Api\Tournament.API.csproj", "{F14738A9-065F-4DC8-9299-AD1644AFDDC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Core", "Tournament.Core\Tournament.Core.csproj", "{6699D986-CCAA-4FE7-AAE5-CD4BD4FEAD7D}"
 EndProject
@@ -14,9 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Info.txt = Info.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Shared", "Tournament.Shared\Tournament.Shared.csproj", "{452E6CF4-12BD-4C32-B793-420483990B87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Presentation", "Tournament.Presentation\Tournament.Presentation.csproj", "{99F38A09-BCEC-453C-8D6C-2F3DFA222D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Models", "Domain.Models\Domain.Models.csproj", "{48C8F352-85B2-4F6E-9694-2716779B0174}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Services", "Tournament.Services\Tournament.Services.csproj", "{293D1476-1C7C-4890-8A2B-77D8B97A6128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Constracts", "Services.Constracts\Services.Constracts.csproj", "{0407D81C-7C6F-40DA-A3E8-1BDA48ABC8F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,14 +38,18 @@ Global
 		{CE99BC92-E9E3-418A-9827-C5F6C9AECE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE99BC92-E9E3-418A-9827-C5F6C9AECE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE99BC92-E9E3-418A-9827-C5F6C9AECE20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{452E6CF4-12BD-4C32-B793-420483990B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{452E6CF4-12BD-4C32-B793-420483990B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{452E6CF4-12BD-4C32-B793-420483990B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{452E6CF4-12BD-4C32-B793-420483990B87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48C8F352-85B2-4F6E-9694-2716779B0174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48C8F352-85B2-4F6E-9694-2716779B0174}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48C8F352-85B2-4F6E-9694-2716779B0174}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48C8F352-85B2-4F6E-9694-2716779B0174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F38A09-BCEC-453C-8D6C-2F3DFA222D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F38A09-BCEC-453C-8D6C-2F3DFA222D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F38A09-BCEC-453C-8D6C-2F3DFA222D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F38A09-BCEC-453C-8D6C-2F3DFA222D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293D1476-1C7C-4890-8A2B-77D8B97A6128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293D1476-1C7C-4890-8A2B-77D8B97A6128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293D1476-1C7C-4890-8A2B-77D8B97A6128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293D1476-1C7C-4890-8A2B-77D8B97A6128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0407D81C-7C6F-40DA-A3E8-1BDA48ABC8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0407D81C-7C6F-40DA-A3E8-1BDA48ABC8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0407D81C-7C6F-40DA-A3E8-1BDA48ABC8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0407D81C-7C6F-40DA-A3E8-1BDA48ABC8F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

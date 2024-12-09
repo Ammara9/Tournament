@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Domain.Models.Entities;
-using Tournament.Shared.DTOs;
+using Tournament.Core.DTOs;
+using Tournament.Core.Entities;
 
 namespace Tournament.Api.AutoMapper
 {
