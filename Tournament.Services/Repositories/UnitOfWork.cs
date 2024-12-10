@@ -10,20 +10,29 @@ namespace Tournament.Services.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly TournamentApiContext _context;
-        public ITournamentRepository TournamentRepository { get; }
+        private readonly TournamentApiContext context;
+        private readonly Lazy<ITournamentRepository> tournamentRepository;
 
-        //public IGameRepository GameRepository { get; }
-        public UnitOfWork(TournamentApiContext _context)
+        //private readonly Lazy<IEmployeeRepository> employeeRepository;
+
+        public ITournamentRepository TournamentRepository => tournamentRepository.Value;
+
+        //public IEmployeeRepository EmployeeRepository => employeeRepository.Value;
+
+        //Add More Repos
+
+        public UnitOfWork(TournamentApiContext context)
         {
-            this._context = _context;
-            TournamentRepository = new TournamentRepository(_context);
-            //GameRepository = new GameRepository(_context);
+            this.context = context;
+            tournamentRepository = new Lazy<ITournamentRepository>(
+                () => new TournamentRepository(context)
+            );
+            //employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
         }
 
         public async Task CompleteAsync()
         {
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 }

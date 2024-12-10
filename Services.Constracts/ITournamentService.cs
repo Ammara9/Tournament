@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Core.DTOs;
 
 namespace Services.Constracts
 {
-    internal interface ITournamentService
+    public interface ITournamentService
     {
+        Task<IEnumerable<TournamentDetailsDto>> GetTournamentDetailsAsync(
+            bool includeGames,
+            bool trackChanges = false
+        );
+        Task<TournamentDetailsDto> GetTournamentAsync(int id, bool trackChanges = false);
     }
 }

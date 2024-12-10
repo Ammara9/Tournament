@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.Constracts
 {
-    internal interface IServiceManager
+    public interface IServiceManager
     {
+        ITournamentService TournamentService { get; }
+        IGameService GameService { get; }
     }
 }

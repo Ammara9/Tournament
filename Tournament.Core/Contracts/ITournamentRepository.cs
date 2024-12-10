@@ -10,8 +10,11 @@ namespace Tournament.Core.Contracts
     public interface ITournamentRepository
     {
         void Add(TournamentDetails tournament);
-        Task<TournamentDetails?> GetTournamentDetailsAsync(int id);
-        Task<IEnumerable<TournamentDetails>> GetTournaments(bool includeGame = false);
+        Task<TournamentDetails?> GetTournamentDetailsAsync(int id, bool trackChanges = false);
+        Task<IEnumerable<TournamentDetails>> GetTournaments(
+            bool includeGame = false,
+            bool trackChanges = false
+        );
         void Remove(TournamentDetails tournamentDetails);
 
         //Task<bool> AnyAsync(int id);

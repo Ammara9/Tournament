@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Services.Constracts
 {
-    internal interface IGameService
-    {
-    }
+    public interface IGameService { }
 }
