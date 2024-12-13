@@ -3,9 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Tournament.Core.Contracts;
+using Tournament.Core.Entities;
+using Tournament.Data.Data;
 
 namespace Tournament.Services.Repositories
 {
-    public class GameRepository : IGameRepository { }
+    public class GameRepository : RepositoryBase<Game>, IGameRepository
+    {
+        public GameRepository(TournamentApiContext context)
+            : base(context) { }
+
+        public async Task<Game?> GetGameAsync(
+            int tournamentId,
+            int gameId,
+            bool trackChanges = false
+        )
+        {
+            return await FindByCondition(
+                    e => e.Id.Equals(gameId) && e.TournamentDetailsId.Equals(tournamentId),
+                    trackChanges
+                )
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Game>> GetGamesAsync(
+            int tournamentId,
+            bool trackchanges = false
+        )
+        {
+            return await FindByCondition(
+                    e => e.TournamentDetailsId.Equals(tournamentId),
+                    trackchanges
+                )
+                .ToListAsync();
+        }
+    }
 }

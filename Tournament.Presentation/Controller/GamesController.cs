@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Constracts;
+using Tournament.Core.Contracts;
 using Tournament.Core.DTOs;
 using Tournament.Data.Data;
 
@@ -17,50 +19,36 @@ namespace Tournament.Presentation.Controller
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private readonly TournamentApiContext _context;
-        private readonly IMapper _mapper;
+        private readonly IServiceManager serviceManager;
 
-        public GamesController(TournamentApiContext context, IMapper map)
+        public GamesController(IServiceManager serviceManager)
         {
-            _context = context;
-            _mapper = map;
+            this.serviceManager = serviceManager;
         }
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(
-            int tournamentId,
-            string title
-        )
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(int tournamentId)
         {
-            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
-                t.Id == tournamentId
-            );
+            var tournamentExist = await serviceManager.TournamentService.AnyAsync(tournamentId);
             if (!tournamentExist)
                 return NotFound();
 
-            var games = await _context
-                .Games.Where(g => g.Title!.Equals(title, StringComparison.OrdinalIgnoreCase))
-                .ToListAsync();
-
-            var gamesDtos = _mapper.Map<IEnumerable<GameDto>>(games);
-
-            return Ok(gamesDtos);
+            var games = await serviceManager.GameService.GetGamesAsync(tournamentId);
+            return Ok(games);
         }
 
-        //// GET: api/Games/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Game>> GetGame(int id)
-        //{
-        //    var game = await _context.Games.FindAsync(id);
+        // GET: api/Games/5
+        [HttpGet("{gameId}")]
+        public async Task<IActionResult> GetGame(int tournamentId, int gameId)
+        {
+            var game = await serviceManager.GameService.GetGameAsync(tournamentId, gameId, false);
 
-        //    if (game == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (game == null)
+                return NotFound();
 
-        //    return game;
-        //}
+            return Ok(game);
+        }
 
         //// PUT: api/Games/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -104,64 +92,64 @@ namespace Tournament.Presentation.Controller
         //    return CreatedAtAction("GetGame", new { id = game.Id }, game);
         //}
 
-        // DELETE: api/Games/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id, int tournamentId)
-        {
-            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
-                t.Id == tournamentId
-            );
-            if (!tournamentExist)
-                return NotFound();
+        //// DELETE: api/Games/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteGame(int id, int tournamentId)
+        //{
+        //    var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
+        //        t.Id == tournamentId
+        //    );
+        //    if (!tournamentExist)
+        //        return NotFound();
 
-            var game = await _context.Games.FirstOrDefaultAsync(g =>
-                g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
-            );
-            if (game == null)
-            {
-                return NotFound();
-            }
+        //    var game = await _context.Games.FirstOrDefaultAsync(g =>
+        //        g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
+        //    );
+        //    if (game == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync();
+        //    _context.Games.Remove(game);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        [HttpPatch("{id:int}")]
-        public async Task<ActionResult> PatchGame(
-            int tournamentId,
-            int id,
-            JsonPatchDocument<GameUpdateDto> patchDocument
-        )
-        {
-            if (patchDocument is null)
-                return BadRequest("No patch document");
+        //[HttpPatch("{id:int}")]
+        //public async Task<ActionResult> PatchGame(
+        //    int tournamentId,
+        //    int id,
+        //    JsonPatchDocument<GameUpdateDto> patchDocument
+        //)
+        //{
+        //    if (patchDocument is null)
+        //        return BadRequest("No patch document");
 
-            var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
-                t.Id == tournamentId
-            );
-            if (!tournamentExist)
-                return NotFound();
+        //    var tournamentExist = await _context.TournamentDetails.AnyAsync(t =>
+        //        t.Id == tournamentId
+        //    );
+        //    if (!tournamentExist)
+        //        return NotFound();
 
-            var gameToPatch = await _context.Games.FirstOrDefaultAsync(g =>
-                g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
-            );
-            if (gameToPatch == null)
-                return NotFound();
+        //    var gameToPatch = await _context.Games.FirstOrDefaultAsync(g =>
+        //        g.Id.Equals(id) && g.TournamentDetailsId.Equals(tournamentId)
+        //    );
+        //    if (gameToPatch == null)
+        //        return NotFound();
 
-            var dto = _mapper.Map<GameUpdateDto>(gameToPatch);
-            patchDocument.ApplyTo(dto, ModelState);
-            TryValidateModel(dto);
+        //    var dto = _mapper.Map<GameUpdateDto>(gameToPatch);
+        //    patchDocument.ApplyTo(dto, ModelState);
+        //    TryValidateModel(dto);
 
-            if (!ModelState.IsValid)
-                return UnprocessableEntity();
+        //    if (!ModelState.IsValid)
+        //        return UnprocessableEntity();
 
-            _mapper.Map(dto, gameToPatch);
-            await _context.SaveChangesAsync();
+        //    _mapper.Map(dto, gameToPatch);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //private bool GameExists(int id)
         //{

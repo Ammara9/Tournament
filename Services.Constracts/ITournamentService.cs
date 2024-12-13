@@ -19,5 +19,6 @@ namespace Services.Constracts
 
         Task<TournamentDetailsDto> PostTournamentAsync(TournamentDetailsCreateDto dto);
         Task<bool> DeleteTournamentAsync(int id);
+        Task<bool> AnyAsync(int id);
     }
 }

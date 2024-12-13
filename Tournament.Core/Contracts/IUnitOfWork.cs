@@ -10,7 +10,7 @@ namespace Tournament.Core.Contracts
     {
         ITournamentRepository TournamentRepository { get; }
 
-        //IGameRepository GameRepository { get; }
+        IGameRepository GameRepository { get; }
         Task CompleteAsync();
     }
 }

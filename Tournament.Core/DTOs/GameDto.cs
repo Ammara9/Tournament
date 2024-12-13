@@ -11,4 +11,5 @@ public record GameDto
     public int Id { get; init; }
     public string? Title { get; init; }
     public DateTime Time { get; init; }
+    public int TournamentDetailsId { get; init; }
 }

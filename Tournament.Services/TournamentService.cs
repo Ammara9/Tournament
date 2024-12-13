@@ -88,5 +88,10 @@ namespace Tournament.Services
 
             return true;
         }
+
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await uow.TournamentRepository.AnyAsync(id);
+        }
     }
 }

@@ -10,6 +10,11 @@ namespace Tournament.Services.Repositories
         public TournamentRepository(TournamentApiContext context)
             : base(context) { }
 
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await Context.TournamentDetails.AnyAsync(c => c.Id == id);
+        }
+
         public async Task<TournamentDetails?> GetTournamentDetailsAsync(
             int id,
             bool trackChanges = false
@@ -27,7 +32,5 @@ namespace Tournament.Services.Repositories
                 ? await FindAll(trackChanges).Include(t => t.Games).ToListAsync()
                 : await FindAll(trackChanges).ToListAsync();
         }
-
-        //ToDo TournamentExistAsync
     }
 }

@@ -16,7 +16,7 @@ namespace Tournament.Core.Contracts
         );
         void Add(T entity);
 
-        //void Update(T entity);
+        void Update(T entity);
         void Remove(T entity);
     }
 }

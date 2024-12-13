@@ -13,11 +13,11 @@ namespace Tournament.Services.Repositories
         private readonly TournamentApiContext context;
         private readonly Lazy<ITournamentRepository> tournamentRepository;
 
-        //private readonly Lazy<IEmployeeRepository> employeeRepository;
+        private readonly Lazy<IGameRepository> gameRepository;
 
         public ITournamentRepository TournamentRepository => tournamentRepository.Value;
 
-        //public IEmployeeRepository EmployeeRepository => employeeRepository.Value;
+        public IGameRepository GameRepository => gameRepository.Value;
 
         //Add More Repos
 
@@ -27,7 +27,7 @@ namespace Tournament.Services.Repositories
             tournamentRepository = new Lazy<ITournamentRepository>(
                 () => new TournamentRepository(context)
             );
-            //employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
+            gameRepository = new Lazy<IGameRepository>(() => new GameRepository(context));
         }
 
         public async Task CompleteAsync()
