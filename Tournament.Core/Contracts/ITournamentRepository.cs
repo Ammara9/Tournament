@@ -18,6 +18,6 @@ namespace Tournament.Core.Contracts
         void Remove(TournamentDetails tournamentDetails);
 
         //Task<bool> AnyAsync(int id);
-        //void Update(Tournament tournament);
+        void Update(TournamentDetails tournament);
     }
 }

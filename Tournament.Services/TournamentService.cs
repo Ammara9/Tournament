@@ -37,10 +37,56 @@ namespace Tournament.Services
 
             if (tournament == null)
             {
-                //ToDo: Fix later
+                throw new ArgumentException($"Tournament with ID {id} not found.");
             }
 
             return mapper.Map<TournamentDetailsDto>(tournament);
+        }
+
+        // put
+        public async Task<TournamentDetailsDto> UpdateTournamentAsync(
+            int id,
+            TournamentUpdateeDto dto
+        )
+        {
+            if (id != dto.Id)
+                throw new ArgumentException("ID Mismatch");
+
+            var existingTournament = await uow.TournamentRepository.GetTournamentDetailsAsync(id);
+            if (existingTournament == null)
+            {
+                throw new ArgumentException($"Tournament with ID {id} not found.");
+            }
+
+            mapper.Map(dto, existingTournament);
+            await uow.CompleteAsync();
+
+            // Return updated tournament
+            return mapper.Map<TournamentDetailsDto>(existingTournament);
+        }
+
+        public async Task<TournamentDetailsDto> PostTournamentAsync(TournamentDetailsCreateDto dto)
+        {
+            var tournament = mapper.Map<TournamentDetails>(dto);
+            uow.TournamentRepository.Add(tournament);
+            await uow.CompleteAsync();
+
+            var createdTournament = mapper.Map<TournamentDetailsDto>(tournament);
+            return (createdTournament);
+        }
+
+        public async Task<bool> DeleteTournamentAsync(int id)
+        {
+            var tournamentDetails = await uow.TournamentRepository.GetTournamentDetailsAsync(id);
+            if (tournamentDetails == null)
+            {
+                return false;
+            }
+
+            uow.TournamentRepository.Remove(tournamentDetails);
+            await uow.CompleteAsync();
+
+            return true;
         }
     }
 }

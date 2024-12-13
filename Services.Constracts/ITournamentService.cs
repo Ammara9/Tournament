@@ -14,5 +14,10 @@ namespace Services.Constracts
             bool trackChanges = false
         );
         Task<TournamentDetailsDto> GetTournamentAsync(int id, bool trackChanges = false);
+
+        Task<TournamentDetailsDto> UpdateTournamentAsync(int id, TournamentUpdateeDto dto);
+
+        Task<TournamentDetailsDto> PostTournamentAsync(TournamentDetailsCreateDto dto);
+        Task<bool> DeleteTournamentAsync(int id);
     }
 }
