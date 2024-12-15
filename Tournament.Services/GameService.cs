@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Services.Constracts;
 using Tournament.Core.Contracts;
+using Tournament.Core.DTOs;
 using Tournament.Core.Entities;
 
 namespace Tournament.Services
@@ -33,10 +29,48 @@ namespace Tournament.Services
         public async Task<Game?> GetGameAsync(
             int tournamentId,
             int gameId,
-            bool trackChanges = false
+            bool trackChanges = true
         )
         {
             return await uow.GameRepository.GetGameAsync(tournamentId, gameId, trackChanges);
+        }
+
+        // put
+        public async Task<Game> UpdateGameAsync(int tournamentId, int gameId, Game game)
+        {
+            var existingGame = await uow.GameRepository.GetGameAsync(gameId, tournamentId);
+            if (existingGame == null)
+            {
+                throw new ArgumentException($"Game with ID {gameId} not found.");
+            }
+
+            mapper.Map(game, existingGame);
+            await uow.CompleteAsync();
+
+            return mapper.Map<Game>(existingGame);
+        }
+
+        public async Task<Game> PostGameAsync(GameUpdateDto dto)
+        {
+            var games = mapper.Map<Game>(dto);
+            uow.GameRepository.Add(games);
+            await uow.CompleteAsync();
+
+            return (games);
+        }
+
+        public async Task<bool> DeleteGameAsync(int tournamentId, int gameId)
+        {
+            var game = await uow.GameRepository.GetGameAsync(gameId, tournamentId);
+            if (game == null)
+            {
+                return false;
+            }
+
+            uow.GameRepository.Remove(game);
+            await uow.CompleteAsync();
+
+            return true;
         }
     }
 }

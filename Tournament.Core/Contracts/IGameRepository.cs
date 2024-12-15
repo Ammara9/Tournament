@@ -13,6 +13,8 @@ namespace Tournament.Core.Contracts
         //void Create(Employee employee);
         //void Delete(Employee employee);
         //Task<IEnumerable<Employee>> GetEmployeesAsync(int companyId, bool trackChanges = false);
+        void Add(Game game);
+        void Remove(Game game);
         Task<Game?> GetGameAsync(int tournamentId, int gameId, bool trackChanges = false);
         Task<IEnumerable<Game>> GetGamesAsync(int tournamentId, bool trackchanges = false);
     }

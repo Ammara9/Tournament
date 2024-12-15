@@ -14,7 +14,7 @@ namespace Tournament.Api.AutoMapper
 
             CreateMap<Game, GameDto>().ReverseMap();
             CreateMap<Game, GameUpdateDto>().ReverseMap();
-            ;
+            CreateMap<GameUpdateDto, Game>();
         }
     }
 }
