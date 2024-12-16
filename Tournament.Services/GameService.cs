@@ -26,6 +26,43 @@ namespace Tournament.Services
             return mapper.Map<IEnumerable<Game>>(games);
         }
 
+        public async Task<object> GetPaginatedGamesAsync(
+            int tournamentId,
+            int pageNumber,
+            int pageSize
+        )
+        {
+            // Hämta totalt antal spel i turneringen
+            var totalGames = await uow.GameRepository.GetGamesCountAsync(tournamentId);
+
+            // Beräkna de spel som ska hämtas baserat på pageNumber och pageSize
+            var games = await uow.GameRepository.GetGamesPageAsync(
+                tournamentId,
+                pageNumber,
+                pageSize
+            );
+
+            // För att skicka tillbaka pagination info kan du skapa en response som innehåller både data och metadata
+            var paginationMetadata = new
+            {
+                TotalItems = totalGames,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalGames / (double)pageSize),
+            };
+
+            // Skapa DTO:er för spelen
+            var gameDtos = mapper.Map<IEnumerable<GameDto>>(games);
+
+            // Returnera både metadata och DTO:erna
+            return new { Pagination = paginationMetadata, Games = gameDtos };
+        }
+
+        public async Task<int> GetTotalGamesCountAsync(int tournamentId)
+        {
+            return await uow.GameRepository.GetGamesCountAsync(tournamentId);
+        }
+
         public async Task<Game?> GetGameAsync(
             int tournamentId,
             int gameId,

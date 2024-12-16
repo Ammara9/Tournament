@@ -15,5 +15,7 @@ namespace Services.Constracts
         Task<Game> UpdateGameAsync(int gameId, int tournamentId, Game game);
         Task<Game> PostGameAsync(GameUpdateDto dto);
         Task<bool> DeleteGameAsync(int tournamentId, int gameId);
+        Task<int> GetTotalGamesCountAsync(int tournamentId);
+        Task<object> GetPaginatedGamesAsync(int tournamentId, int pageNumber, int pageSize);
     }
 }

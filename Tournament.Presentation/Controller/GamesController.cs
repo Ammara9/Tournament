@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Services.Constracts;
 using Tournament.Core.DTOs;
 using Tournament.Core.Entities;
@@ -18,14 +19,29 @@ namespace Tournament.Presentation.Controller
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(int tournamentId)
+        public async Task<ActionResult> GetGames(
+            int tournamentId,
+            int pageNumber = 1,
+            int pageSize = 20
+        )
         {
-            var tournamentExist = await serviceManager.TournamentService.AnyAsync(tournamentId);
-            if (!tournamentExist)
-                return NotFound();
+            // Maximal pageSize-gräns
+            if (pageSize > 100)
+                pageSize = 100;
 
-            var games = await serviceManager.GameService.GetGamesAsync(tournamentId);
-            return Ok(games);
+            // Kontrollera om den angivna sidan är större än 0
+            if (pageNumber < 1)
+                pageNumber = 1;
+
+            // Anropa tjänsten för att hämta paginerade spel och metadata
+            var result = await serviceManager.GameService.GetPaginatedGamesAsync(
+                tournamentId,
+                pageNumber,
+                pageSize
+            );
+
+            // Skicka tillbaka data och metadata
+            return Ok(result);
         }
 
         // GET: api/Games/5
@@ -67,16 +83,18 @@ namespace Tournament.Presentation.Controller
             );
         }
 
+        // DELETE: api/tournaments/{tournamentId}/games/{gameId}
         [HttpDelete("{gameId}")]
         public async Task<IActionResult> DeleteGame(int tournamentId, int gameId)
         {
-            var tournamentExist = await serviceManager.TournamentService.AnyAsync(tournamentId);
-            if (!tournamentExist)
-                return NotFound();
+            //// Kontrollera om turneringen finns
+            //var tournamentExist = await serviceManager.TournamentService.AnyAsync(tournamentId);
+            //if (!tournamentExist)
+            //    return NotFound(new { message = "Tournament not found." });
 
             var result = await serviceManager.GameService.DeleteGameAsync(tournamentId, gameId);
             if (!result)
-                return NotFound();
+                return NotFound(new { message = "Game not found." });
 
             return NoContent();
         }

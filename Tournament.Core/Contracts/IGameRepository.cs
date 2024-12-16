@@ -15,6 +15,8 @@ namespace Tournament.Core.Contracts
         //Task<IEnumerable<Employee>> GetEmployeesAsync(int companyId, bool trackChanges = false);
         void Add(Game game);
         void Remove(Game game);
+        Task<IEnumerable<Game>> GetGamesPageAsync(int tournamentId, int pageNumber, int pageSize);
+        Task<int> GetGamesCountAsync(int tournamentId);
         Task<Game?> GetGameAsync(int tournamentId, int gameId, bool trackChanges = false);
         Task<IEnumerable<Game>> GetGamesAsync(int tournamentId, bool trackchanges = false);
     }

@@ -28,6 +28,27 @@ namespace Tournament.Services.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        //pagination
+        public async Task<IEnumerable<Game>> GetGamesPageAsync(
+            int tournamentId,
+            int pageNumber,
+            int pageSize
+        )
+        {
+            return await Context
+                .Games.Where(g => g.TournamentDetailsId == tournamentId)
+                .Skip((pageNumber - 1) * pageSize) // Hoppa över tidigare sidor
+                .Take(pageSize) // Ta endast de spel som motsvarar pageSize
+                .ToListAsync();
+        }
+
+        public async Task<int> GetGamesCountAsync(int tournamentId)
+        {
+            return await Context
+                .Games.Where(g => g.TournamentDetailsId == tournamentId)
+                .CountAsync();
+        }
+
         public async Task<IEnumerable<Game>> GetGamesAsync(
             int tournamentId,
             bool trackchanges = false
