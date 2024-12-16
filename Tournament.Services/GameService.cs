@@ -89,6 +89,11 @@ namespace Tournament.Services
 
         public async Task<Game> PostGameAsync(GameUpdateDto dto)
         {
+            var totalGames = await uow.GameRepository.GetGamesCountAsync(dto.TournamentDetailsId);
+            if (totalGames >= 10)
+            {
+                throw new InvalidOperationException("A tournament can have a maximum of 10 games.");
+            }
             var games = mapper.Map<Game>(dto);
             uow.GameRepository.Add(games);
             await uow.CompleteAsync();

@@ -78,7 +78,10 @@ namespace Tournament.Presentation.Controller
 
             return CreatedAtAction(
                 nameof(GetGames),
-                new { tournamentId = dto.TournamentDetailsId, gameId = postGame.Id },
+                new
+                { /*tournamentId = dto.TournamentDetailsId,*/
+                    gameId = postGame.Id,
+                },
                 postGame
             );
         }
